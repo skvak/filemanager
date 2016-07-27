@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
     <?php
       require('file_manager.php');
+
+      isset($_GET['cat']) ? $cat = $_GET['cat'] : $cat = getcwd();
+      isset($_GET['sort']) ? $sort = $_GET['sort'] : $sort = 'name';
+      isset($_GET['order']) ? $order = $_GET['order'] : $order = 'asc';
+
+      $sort = $sort.$order;
+
+      $filemanager = Filemanager::getInstance($cat);
+      $sortCriteria = $filemanager->GetSortCriteria();
+      $files = $filemanager->MultiSort($filemanager->files, $sortCriteria[$sort], true);
+
       isset($_GET['cat']) ? $path = $_GET['cat'] : $path = dirname(__FILE__);
 
       $order = array('name' => 'desc',
@@ -31,15 +42,29 @@
   </p>
   <table>
     <tr>
-      <th><a href="<?php echo $_SERVER['PHP_SELF'].'?sort=name&order='.$order['name'].'&cat='.realpath($_GET['cat']);?>">Name</a></th>
-      <th><a href="<?php echo $_SERVER['PHP_SELF'].'?sort=type&order='.$order['type'].'&cat='.realpath($_GET['cat']);?>">Type</a></th>
-      <th><a href="<?php echo $_SERVER['PHP_SELF'].'?sort=size&order='.$order['size'].'&cat='.realpath($_GET['cat']);?>">Size</a></th>
+      <th>
+        <a href="<?php echo $_SERVER['PHP_SELF'].'?sort=name&order='
+                                                .$order['name']
+                                                .'&cat='
+                                                .realpath($_GET['cat']);?>">Name</a>
+      </th>
+      <th>
+        <a href="<?php echo $_SERVER['PHP_SELF'].'?sort=type&order='
+                                                .$order['type']
+                                                .'&cat='
+                                                .realpath($_GET['cat']);?>">Type</a>
+      </th>
+      <th>
+        <a href="<?php echo $_SERVER['PHP_SELF'].'?sort=size&order='
+                                                .$order['size']
+                                                .'&cat='
+                                                .realpath($_GET['cat']);?>">Size</a>
+      </th>
     </tr>
-      <?php if ($files == null)
-      {?>
-        <tr>
-          <td>No files</td>
-        </tr>
+    <?php if ($files == null) {?>
+    <tr>
+      <td>No files</td>
+    </tr>
       <?php
       }
       else

@@ -4,10 +4,10 @@
   {
     static private $instance = null;
 
-    static public function getInstance()
+    static public function getInstance($cat)
     {
       return
-      self::$instance === null ? self::$instance = new static() : self::$instance;
+      self::$instance === null ? self::$instance = new static($cat) : self::$instance;
     }
   }
 
@@ -15,6 +15,16 @@
   {
     use Singleton;
 
+    private function __construct($cat)
+    {
+      $this->files = $this->get_files($cat);
+    }
+
+    /**
+     * Method that make array with data about files and dir's in $directory
+     * @param  string  $directory input directory
+     * @return array  $files  multidimensional array of files and dir's in input directory
+     */
     public function get_files($directory)
     {
       $files = array();
@@ -51,6 +61,13 @@
       return $files;
     }
 
+    /**
+     * Method that sort $files array
+     * @param  array  $data input array for sorting
+     * @param  array  $sortCriteria criteries for sorting data
+     * @param  bool   $caseInSensitive enter sort criteria - sensitive or not to data register
+     * @return array  $files  sorted multidimensional array
+     */
     public function MultiSort($data, $sortCriteria, $caseInSensitive = true)
     {
       if( !is_array($data) || !is_array($sortCriteria))
@@ -63,7 +80,10 @@
         $colList = array();
         foreach ($data as $key => $row)
         {
-          $convertToLower = $caseInSensitive && (in_array(SORT_STRING, $sortAttributes) || in_array(SORT_REGULAR, $sortAttributes));
+          $convertToLower = $caseInSensitive
+                            && (in_array(SORT_STRING, $sortAttributes)
+                            || in_array(SORT_REGULAR, $sortAttributes));
+
           $rowData = $convertToLower ? strtolower($row[$sortColumn]) : $row[$sortColumn];
           $colLists[$sortColumn][$key] = $rowData;
         }
@@ -81,6 +101,10 @@
       return end($args);
     }
 
+    /**
+     * Sorting criterias
+     * @return array  $sortCriteria criteries for sorting data
+     */
     public function GetSortCriteria()
     {
       $sortCriteria['namedesc'] = array('type' => array(SORT_ASC),
@@ -97,19 +121,4 @@
       return $sortCriteria;
     }
   }
-
-  isset($_GET['cat']) ? $cat = $_GET['cat'] : $cat = getcwd();
-
-  isset($_GET['sort']) ? $sort = $_GET['sort'] : $sort = 'name';
-
-  isset($_GET['order']) ? $order = $_GET['order'] : $order = 'asc';
-
-  $sort = $sort.$order;
-
-  $filemanager = Filemanager::getInstance();
-  $files = $filemanager->get_files($cat);
-  $sortCriteria = $filemanager->GetSortCriteria();
-
-  $files = $filemanager->MultiSort($files, $sortCriteria[$sort], true);
-
 ?>
