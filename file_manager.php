@@ -11,7 +11,7 @@
     }
   }
 
-  class Filemanager()
+  class Filemanager
   {
     use Singleton;
 
@@ -19,7 +19,7 @@
     {
       $files = array();
 
-      if ($directory[strlen($directory)-1] != '/') $directory .= '/';
+      if ($directory[strlen($directory)-1] !== '/') $directory .= '/';
 
       if ($catalog = opendir($directory))
       {
@@ -106,13 +106,8 @@
 
   $sort = $sort.$order;
 
-
   $filemanager = Filemanager::getInstance();
-
   $files = $filemanager->get_files($cat);
-
-  var_dump($filemanager->get_files($cat));die;
-
   $sortCriteria = $filemanager->GetSortCriteria();
 
   $files = $filemanager->MultiSort($files, $sortCriteria[$sort], true);

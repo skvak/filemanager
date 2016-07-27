@@ -25,7 +25,7 @@
 
       if (isset($_GET['sort']))
       {
-        ($_GET['order'] == 'desc') ? $order[$_GET['sort']] = 'asc' : $orderName = 'desc';
+        ($_GET['order'] === 'desc') ? $order[$_GET['sort']] = 'asc' : $orderName = 'desc';
       }
     ?>
   </p>
@@ -35,7 +35,7 @@
       <th><a href="<?php echo $_SERVER['PHP_SELF'].'?sort=type&order='.$order['type'].'&cat='.realpath($_GET['cat']);?>">Type</a></th>
       <th><a href="<?php echo $_SERVER['PHP_SELF'].'?sort=size&order='.$order['size'].'&cat='.realpath($_GET['cat']);?>">Size</a></th>
     </tr>
-      <?php if ($files == NULL)
+      <?php if ($files == null)
       {?>
         <tr>
           <td>No files</td>
