@@ -25,7 +25,7 @@
       {
         while (false !== ($item = readdir($catalog)))
         {
-          if (!in_array($item, array(".","..")))
+          if (!in_array($item, array(".","..",".git")))
           {
             $file = $directory.$item;
             $fileName = pathinfo($item);
@@ -102,7 +102,7 @@
 
   isset($_GET['sort']) ? $sort = $_GET['sort'] : $sort = 'name';
 
-  isset($_GET['order']) ? $order = $_GET['order'] : $order = 'desc';
+  isset($_GET['order']) ? $order = $_GET['order'] : $order = 'asc';
 
   $sort = $sort.$order;
 
